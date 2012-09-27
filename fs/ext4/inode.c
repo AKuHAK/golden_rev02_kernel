@@ -3958,7 +3958,7 @@ static int ext4_do_update_inode(handle_t *handle,
 			cpu_to_le16(ei->i_file_acl >> 32);
 	raw_inode->i_file_acl_lo = cpu_to_le32(ei->i_file_acl);
 	if (ei->i_disksize != ext4_isize(raw_inode)) {
-	ext4_isize_set(raw_inode, ei->i_disksize);
+		ext4_isize_set(raw_inode, ei->i_disksize);
 		need_datasync = 1;
 	}
 	if (ei->i_disksize > 0x7fffffffULL) {
