@@ -1,0 +1,35 @@
+# upload in releases if branch is tagged
+deploy:
+  provider: releases
+  api_key: $APIKEY
+  file: rooted_$TRAVIS_COMMIT.zip
+  skip_cleanup: true
+  on:
+    tags: true
+all_branches: true
+
+sudo: required
+before_install:
+ - sudo apt-get update -qyy
+ - sudo apt-get install -qyy curl bc make git build-essential
+ - git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6 /opt/toolchains/arm-eabi-4.6/
+before_script:
+ - export DEFCONFIG=akuhak_pxa1908-xcover3ltexx_defconfig
+script:
+# export your own config for example
+ - ./build_kernel.sh
+ - ls -l vmlinux
+# - mkimage -A arm64 -O linux -T kernel -C gzip -a 01000000 -e 01000000 -d arch/arm64/boot/Image.gz -n "pxa1928dkb linux" arch/arm64/boot/uImage
+# - ./pxa1908-dtbtool -o dtb.img -p scripts/dtc/ arch/arm64/boot/dts/ -v
+# - mkdir non_rooted
+# - ./mkbootfs ramdisk | gzip  > non_rooted/ramdisk-out.cpio.gz
+# - ./pxa-mkbootimg --kernel arch/arm64/boot/uImage --ramdisk non_rooted/ramdisk-out.cpio.gz --dt dtb.img --unknown 0x03000000 -o boot.img
+# - echo "SEANDROIDENFORCE" >> boot.img
+# - tar -H ustar -c boot.img > boot.tar
+# - md5sum -t boot.tar >> boot.tar
+# - mv boot.tar non_rooted/boot.tar.md5
+# - zip non_rooted.zip non_rooted/boot.tar.md5
+#after_script:
+# - curl --upload-file non_rooted.zip https://transfer.sh/non_rooted.zip | grep transfer
+# - curl --upload-file rooted_$TRAVIS_COMMIT.zip https://transfer.sh/rooted_$TRAVIS_COMMIT.zip | grep transfer
+
