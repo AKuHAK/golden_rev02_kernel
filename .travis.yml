@@ -16,9 +16,7 @@ before_install:
 script:
 # export your own config for example
  - ./build_kernel.sh
- - ./mkbootimg --kernel ./arch/arm/boot/zImage --ramdisk split_img/boot.img-ramdisk.cpio.gz \
-               --base 10000000 --pagesize 2048 --kernel_offset 00008000 --ramdisk_offset 01000000 \
-               --second_offset 00f00000 --tags_offset 00000100 -o boot.img
+ - ./mkbootimg --kernel ./arch/arm/boot/zImage --ramdisk split_img/boot.img-ramdisk.cpio.gz --base 10000000 --pagesize 2048 --kernel_offset 00008000 --ramdisk_offset 01000000 --second_offset 00f00000 --tags_offset 00000100 -o boot.img
  - tar -H ustar -c boot.img > boot.tar
  - md5sum -t boot.tar >> boot.tar
  - mv boot.tar boot.tar.md5
